@@ -22,7 +22,7 @@
     <!--#double agent-->  
 </head>
 <body>
-  <h1>AI Agent </h1>
+  <h1>AI Agent</h1>
   <button id="button" onclick="myfunction()"> Remove Agent/s</button>
   <input list="agent" name="BOT" id="BOT"  onchange="UpdateAgent()">
   <datalist id="agent">
@@ -81,15 +81,20 @@
             // to do : add paths for each element
             console.log(icons[0].Agent_name)
             iconSelect.refresh(icons);
-            selectedText= icons[iconSelect.getSelectedValue()]
-            //console.log(selectedText.Agent_name)
            window.agentmanger=icons;
-            // set up pesedu event listeners for the icons selected 
-            //load icons
-            window.activeagent ="Clippy"
-            golbalthis_agent="Clippy"
-            //console.log(window.activeagent)
-            //console.log(window.agentmanger)
+           window.agentID= icons[iconSelect.getSelectedValue()]
+           // hold golbal variable with properties of the agent
+            window.activeagent =  {
+            name:0,
+            id:0,
+            holder:null,
+           }
+            window.activeagent.name ="Clippy"
+            window.activeagent.id ="1"
+            window.activeagent.holder =window.agentmanger[0];
+            console.log(window.activeagent)
+            // todo: add  agentobject instead  
+            console.log(window.agentmanger[window.agentID])   
           //console.log(window.agentmanger[0].Agent_name)
             
         };
@@ -97,7 +102,10 @@
     function UpdateAgent(agent_name){
             var val = document.getElementById("BOT").value;
 
-            var val = agent_name// try to find the chosen agent      
+            window.agentID =window.agentmanger[window.agentID]
+            window.activeagent.name =agent_name
+            var val =  window.activeagent.name
+            // try to find the chosen agent      
            // console.log(iconSelect.getSelectedValue()); //selected index
           
             console.log(`the agent ${val} at your service`)
@@ -105,26 +113,25 @@
               agent.show();
               agent.speak(`i'm ${val} at your service`)
               //console.log(agent);// Agent manger
-              globalThis.acctivebot=agent;
-             golbalthis_agent=agent;
+             golbalthis_agent=val;
              //console.log(golbalthis_agent);
              //golbalthis_agent.speak("")
               return golbalthis_agent
             })
          }
-        
+        // init for the first time
          var agent = "Clippy"
           clippy.load('Clippy', function(agent){
-        //     // init 
+           // init 
             agent.show();
-            
             agent.speak("Hello, I'm Clippy your Good old friend powered by chat GPT!");
             agent.speak("كيف يمكنني مساعدتك؟");
-             console.log(agent);// Agent manger
+             console.log(agent);// current agent manger
             golbalthis_agent=agent;
 
          });
-             function myfunction(){ 
+          
+         function myfunction(){ 
            console.log("Asking AIENDPOINT");
            //test  to remove all agents but leave the selected one
            var list = document.getElementsByClassName("Clippy");
@@ -143,11 +150,13 @@ const activebotfound = new CustomEvent("botfound", {
   detail: {
    constrctor () {
     //UpdateAgent("Clippy"),
+    agentnewID=window.agentmanger[selectedText];
+    window.activeagent.agent
     console.log("Agent update triggered")
    }, 
-    name: golbalthis_agent.path,
+    name: window.activeagent.name,
     ID:selectedText,//agent ID
-    agent:golbalthis_agent//agent variable
+    agent:window.agentmanger[selectedText]//return agent variable from the manger list
   },
 });
 // add an appropriate event listener
@@ -157,14 +166,21 @@ e.detail.constrctor()
 );
 place.addEventListener('botfound', function(e){
   console.log("the bot updated ");  
+  console.log(e.detail.id);
+  window.agentID= window.agentmanger[iconSelect.getSelectedValue()]
+
    //nextAgent()
    var tag= document.getElementsByClassName("selected-icon")[0].children;
    console.log(tag);
    tag.onchange = function(){
-    
+
     console.log(` test : ${tag.value} has been changed the id is ${e.detail}`); 
    }
-              document.getElementById("avatar").innerHTML=`the agent is ${selectedText} ID:  ${iconSelect.getSelectedValue()} and the name is ${golbalthis_agent.path}`;
+             selectedText=iconSelect.getSelectedValue()
+
+              window.agent= window.agentmanger[selectedText-1]
+              document.getElementById("avatar").innerHTML=`the agent is ${selectedText} ID:  ${iconSelect.getSelectedValue()} and the name is ${window.agent.Agent_name}`;
+              console.log(window.agent)
                //change it (the second string literal) to the name of the agent 
                //ping
 
