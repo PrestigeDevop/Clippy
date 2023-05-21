@@ -57,7 +57,9 @@ function IconSelect($$elementID, $$parameters) {
 
             //Nesneye basıldığında gizlemeyi iptal et.
             _View.iconSelectElement.addEventListener('click', function($event){
-                $event.stopPropagation();             
+                $event.stopPropagation();    
+               // console.log(`you clicked`);
+         
             });
             
             //dışarı basıldığında gizle.
@@ -82,7 +84,10 @@ function IconSelect($$elementID, $$parameters) {
             $icons[i].element = _View.createIcon($icons[i].iconFilePath, $icons[i].iconValue, i, $$parameters);
             $icons[i].element.onclick = function(){
                 setSelectedIndex(this.childNodes[0].getAttribute('icon-index'));
-                
+                console.log(`selected item ${this.childNodes[0].getAttribute('icon-index')} value  ${this.childNodes[0]}}`);
+               console.log(`event clicker updated `)
+               window.paneloptions()
+               window.UpdateAgent(`${window.activeagent}`)
             };
             _icons.push($icons[i]);
             

@@ -14,6 +14,8 @@
     <script src="./main.js"></script>
     <script src="./agent.js"></script>
    <!-- <script src="./demo.js"></script>-->
+      <!-- onnx runtime (AI engine)-->
+   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
 
     <!-- options with icons-->
     <script type="text/javascript" src="iconselect.js"></script>
@@ -54,8 +56,29 @@
      var selectedText;
      var golbalthis_agent;
      var clippymanger= window.clippy;
+      function UpdateAgent(agent){
+            var val = document.getElementById("BOT").value;
+           val= window.agent.Agent_name
+            //window.agentID =window.agentmanger[window.agentID]
+           // window.activeagent.name =agent_name
+           // var val =  window.activeagent.name
+            // try to find the chosen agent      
+           // console.log(iconSelect.getSelectedValue()); //selected index
+
+            console.log(`the agent ${val} at your service`)
+            clippy.load(`${val}`, function(agent){
+              agent.show();
+              agent.speak(`i'm ${val} at your service`)
+              //console.log(agent);// Agent manger
+             golbalthis_agent=val;
+             //console.log(golbalthis_agent);
+             //golbalthis_agent.speak("")
+              return golbalthis_agent
+            })
+         }
      //console.log(`${clippymanger} loaded`)
      //console.log(clippymanger)
+     // to do add updateagent() for each element
       window.onload = function(){
         iconSelect = new IconSelect("my-icon-select", 
                 {'selectedIconWidth':70,
@@ -67,6 +90,7 @@
                 'vectoralIconNumber':4,
                 'horizontalIconNumber':4});
              var icons = [];
+      
             icons.push({'iconFilePath':'images/icons/1.png', 'iconValue':'1',Agent_name:'Clippy'});
             icons.push({'iconFilePath':'images/icons/2.png', 'iconValue':'2',Agent_name:'Rover'});
             icons.push({'iconFilePath':'images/icons/3.png', 'iconValue':'3',Agent_name:'Bonzi'});
@@ -91,7 +115,7 @@
            }
             window.activeagent.name ="Clippy"
             window.activeagent.id ="1"
-            window.activeagent.holder =window.agentmanger[0];
+            window.activeagent.holder =window.agentmanger[0];//function boostrap();
             console.log(window.activeagent)
             // todo: add  agentobject instead  
             console.log(window.agentmanger[window.agentID])   
@@ -99,29 +123,10 @@
             
         };
     
-    function UpdateAgent(agent_name){
-            var val = document.getElementById("BOT").value;
-
-            window.agentID =window.agentmanger[window.agentID]
-            window.activeagent.name =agent_name
-            var val =  window.activeagent.name
-            // try to find the chosen agent      
-           // console.log(iconSelect.getSelectedValue()); //selected index
-          
-            console.log(`the agent ${val} at your service`)
-            clippy.load(`${val}`, function(agent){
-              agent.show();
-              agent.speak(`i'm ${val} at your service`)
-              //console.log(agent);// Agent manger
-             golbalthis_agent=val;
-             //console.log(golbalthis_agent);
-             //golbalthis_agent.speak("")
-              return golbalthis_agent
-            })
-         }
+   
         // init for the first time
          var agent = "Clippy"
-          clippy.load('Clippy', function(agent){
+        clippy.load('Clippy', function(agent){
            // init 
             agent.show();
             agent.speak("Hello, I'm Clippy your Good old friend powered by chat GPT!");
@@ -136,8 +141,11 @@
            //test  to remove all agents but leave the selected one
            var list = document.getElementsByClassName("Clippy");
             for (let item of list) {
-           // console.log(item);
-            item.remove();}
+           //console.log(item);
+             console.log(window.clippy);
+              console.log(window.clippy.Balloon.prototype);
+             //item.remove();
+          }
         }
         globalThis.window.CLIPPY_CDN ='agent' //folderprefixname +_agent name
         
@@ -156,7 +164,7 @@ const activebotfound = new CustomEvent("botfound", {
    }, 
     name: window.activeagent.name,
     ID:selectedText,//agent ID
-    agent:window.agentmanger[selectedText]//return agent variable from the manger list
+    agent:window.agentmanger[selectedText-1]   //return agent variable from the manger list
   },
 });
 // add an appropriate event listener
@@ -177,9 +185,13 @@ place.addEventListener('botfound', function(e){
     console.log(` test : ${tag.value} has been changed the id is ${e.detail}`); 
    }
              selectedText=iconSelect.getSelectedValue()
-
+              console.log(window.agent)
               window.agent= window.agentmanger[selectedText-1]
-              document.getElementById("avatar").innerHTML=`the agent is ${selectedText} ID:  ${iconSelect.getSelectedValue()} and the name is ${window.agent.Agent_name}`;
+              //to do update the handler to the appropriate agent object(index)
+              window.activeagent.holder= window.activeagent;
+              var handler =window.activeagent.holder; 
+              document.getElementById("avatar").innerHTML=`the  selected agent is ${selectedText} hanlder:  ${handler} and the name is ${window.agent.Agent_name}`;
+              console.log(window.agent)
               console.log(window.agent)
                //change it (the second string literal) to the name of the agent 
                //ping
@@ -245,7 +257,20 @@ function dragElement(elmnt) {
   }
 }
   
- 
+var target = document.querySelector('my-icon-select-box-scroll')
+var observer = new MutationObserver(function(mutations) {
+    console.log(target.innerText);   
+});
+observer.observe(target, {
+    attributes:    true,
+    childList:     true,
+    characterData: true
+});
+
+$('my-icon-select-box-scroll').bind('DOMSubtreeModified', function(){
+  console.log('changed');
+});
+
   </script>
 </body>
 </html>
