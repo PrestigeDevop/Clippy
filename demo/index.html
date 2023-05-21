@@ -70,7 +70,7 @@
               agent.show();
               agent.speak(`i'm ${val} at your service`)
               //console.log(agent);// Agent manger
-             golbalthis_agent=val;
+             golbalthis_agent=agent;
              //console.log(golbalthis_agent);
              //golbalthis_agent.speak("")
               return golbalthis_agent
@@ -119,7 +119,7 @@
             console.log(window.activeagent)
             // todo: add  agentobject instead  
             console.log(window.agentmanger[window.agentID])   
-          //console.log(window.agentmanger[0].Agent_name)
+          //console.log(swindow.agentmanger[0].Agent_name)
             
         };
     
@@ -139,12 +139,15 @@
          function myfunction(){ 
            console.log("Asking AIENDPOINT");
            //test  to remove all agents but leave the selected one
-           var list = document.getElementsByClassName("Clippy");
+           var list = document.getElementsByClassName("Clippy","clippy-balloon clippy-top-left");
             for (let item of list) {
            //console.log(item);
              console.log(window.clippy);
-              console.log(window.clippy.Balloon.prototype);
-             //item.remove();
+              golbalthis_agent.speak("Good bye");
+              golbalthis_agent.play("Hide");
+              golbalthis_agent.hide();
+             item.remove();
+             //console.log(window.clippy);
           }
         }
         globalThis.window.CLIPPY_CDN ='agent' //folderprefixname +_agent name
@@ -161,6 +164,9 @@ const activebotfound = new CustomEvent("botfound", {
     agentnewID=window.agentmanger[selectedText];
     window.activeagent.agent
     console.log("Agent update triggered")
+    window.agent=window.activeagent;
+   
+    golbalthis_agent=window.agent;
    }, 
     name: window.activeagent.name,
     ID:selectedText,//agent ID

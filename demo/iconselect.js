@@ -88,6 +88,8 @@ function IconSelect($$elementID, $$parameters) {
                console.log(`event clicker updated `)
                window.paneloptions()
                window.UpdateAgent(`${window.activeagent}`)
+               //test:
+              // window.activeagent=this.childNodes[0].getAttribute;
             };
             _icons.push($icons[i]);
             
