@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="./clippy.css" media="all">
     <style>
         html {
-            background: url('http://wallpapercave.com/wp/7VNksl0.jpg') no-repeat center center fixed;
+            background: url('https://raw.githubusercontent.com/PrestigeDevop/Clippy/main/demo/background.png') no-repeat center center fixed;
             -webkit-background-size: cover;
             -moz-background-size: cover;
             -o-background-size: cover;
@@ -18,6 +18,8 @@
    <!-- <script src="./demo.js"></script>-->
       <!-- onnx runtime (AI inference engine)-->
    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
+   <script src="API.js"></script>
 
     <!-- options with icons-->
     <script type="text/javascript" src="iconselect.js"></script>
@@ -28,7 +30,8 @@
 <body>
   
   <div id="dragable">
-    <div class="dragpanel"id="dragableheader">Control Panel</div>
+    <div class="dragpanel"id="dragableheader">Control Panel</div>    <button style="size:1cm;" onclick="setelements()">></button>
+
 <area>
     <p>Details</p>
     <div id="avatar" style="font-size: xx-small;  overflow-x:scroll;" > text: @</div>
@@ -115,6 +118,10 @@
             golbalthis_agent=agent;//Singleton pattern 
             window.activeagent=golbalthis_agent;
          });
+         function setelements(){
+          var q = document.getElementById("QAS");
+
+         }
           function ask(){
             //console.log(golbalthis_agent);
             var q = document.getElementById("QAS");
