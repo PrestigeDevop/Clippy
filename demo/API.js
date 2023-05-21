@@ -1,4 +1,4 @@
-document.getElementById("submit-btn").addEventListener("click", function () {
+document.getElementById("ask").addEventListener("click", function () {
     sendToChatGPT();
   });
   
