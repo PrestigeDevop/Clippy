@@ -1,5 +1,7 @@
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" type="text/css" href="./clippy.css" media="all">
     <style>
         html {
@@ -14,7 +16,7 @@
     <script src="./main.js"></script>
     <script src="./agent.js"></script>
    <!-- <script src="./demo.js"></script>-->
-      <!-- onnx runtime (AI engine)-->
+      <!-- onnx runtime (AI inference engine)-->
    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
 
     <!-- options with icons-->
@@ -24,31 +26,21 @@
     <!--#double agent-->  
 </head>
 <body>
-  <h1>AI Agent</h1>
-  <button id="button" onclick="myfunction()"> Remove Agent/s</button>
-  <input list="agent" name="BOT" id="BOT"  onchange="UpdateAgent()">
-  <datalist id="agent">
-    <option value="Clippy">
-    <option value="Rover">
-    <option value="Bonzi">
-    <option value="F1">
-    <option value="Genie">
-    <option value="Genius">
-    <option value="Rocky">
-   <option value="Peedy">
-   <option value="Merlin">
-   <option value="Links">
- 
-  </datalist>
-  <div id="avatar"> text: @</div>
-  <div id="my-icon-select"></div>
+  
   <div id="dragable">
     <div class="dragpanel"id="dragableheader">Control Panel</div>
-    <textarea id="QAS">give me a Random fact</textarea>
-    <p>Move</p>
-    <p>this</p>
-    <p>DIV</p>  
-    <button onclick="paneloptions()">clicker</button>
+<area>
+    <p>Details</p>
+    <div id="avatar" style="font-size: xx-small;  overflow-x:scroll;" > text: @</div>
+    <div id="my-icon-select" style="align-self: center; padding: auto;  "></div>
+    <area>
+    <button id="button" onclick="myfunction()"> Remove Agent/s</button>
+    <div></div>
+    <textarea id="QAS" style=" padding: auto;">give me a Random fact</textarea>
+
+       <!-- leave this it's needed [some callstacks depend on its ] -->
+    <button onclick="paneloptions()" style="display: none;">event evaluation</button>
+    <button onclick="ask()">Ask</button>
   
   </div>
     <script type="text/javascript">
@@ -57,32 +49,21 @@
      var golbalthis_agent;
      var clippymanger= window.clippy;
       function UpdateAgent(agent){
-            var val = document.getElementById("BOT").value;
            val= window.agent.Agent_name
-            //window.agentID =window.agentmanger[window.agentID]
-           // window.activeagent.name =agent_name
-           // var val =  window.activeagent.name
-            // try to find the chosen agent      
-           // console.log(iconSelect.getSelectedValue()); //selected index
-
             console.log(`the agent ${val} at your service`)
             clippy.load(`${val}`, function(agent){
               agent.show();
               agent.speak(`i'm ${val} at your service`)
-              //console.log(agent);// Agent manger
              golbalthis_agent=agent;
              //console.log(golbalthis_agent);
              //golbalthis_agent.speak("")
               return golbalthis_agent
             })
          }
-     //console.log(`${clippymanger} loaded`)
-     //console.log(clippymanger)
-     // to do add updateagent() for each element
       window.onload = function(){
         iconSelect = new IconSelect("my-icon-select", 
-                {'selectedIconWidth':70,
-                'selectedIconHeight':70,
+                {'selectedIconWidth':"Auto",//
+                'selectedIconHeight':100,
                 'selectedBoxPadding':1,
                 'iconsWidth':100,
                 'iconsHeight':100,
@@ -122,24 +103,29 @@
           //console.log(swindow.agentmanger[0].Agent_name)
             
         };
-    
-   
+
         // init for the first time
          var agent = "Clippy"
         clippy.load('Clippy', function(agent){
            // init 
             agent.show();
             agent.speak("Hello, I'm Clippy your Good old friend powered by chat GPT!");
-            agent.speak("كيف يمكنني مساعدتك؟");
+            agent.speak("how can I help you today?");
              console.log(agent);// current agent manger
-            golbalthis_agent=agent;
-
+            golbalthis_agent=agent;//Singleton pattern 
+            window.activeagent=golbalthis_agent;
          });
-          
+          function ask(){
+            //console.log(golbalthis_agent);
+            var q = document.getElementById("QAS");
+             console.log(`the query string is ${q.value}`)
+            golbalthis_agent.speak(q.value);
+          }
          function myfunction(){ 
            console.log("Asking AIENDPOINT");
            //test  to remove all agents but leave the selected one
-           var list = document.getElementsByClassName("Clippy","clippy-balloon clippy-top-left");
+           var list = document.getElementsByClassName("Clippy");
+           var leftovers = document.querySelectorAll("clippy-balloon clippy-top-left, clippy-balloon clippy-bottom-right, clippy-balloon clippy-top-right, clippy-balloon clippy-bottom-left, clippy-balloon clippy-bottom-right, clippy-tip, clippy-content")
             for (let item of list) {
            //console.log(item);
              console.log(window.clippy);
@@ -149,23 +135,24 @@
              item.remove();
              //console.log(window.clippy);
           }
+            for (let item of leftovers) {
+              item.remove();
+            }
+       
         }
         globalThis.window.CLIPPY_CDN ='agent' //folderprefixname +_agent name
         
   function paneloptions(){
-    //console.log("TEST")
     var q = document.getElementById("QAS");
     console.log(`the query string is ${q.value}`)
 
 const activebotfound = new CustomEvent("botfound", {
   detail: {
    constrctor () {
-    //UpdateAgent("Clippy"),
     agentnewID=window.agentmanger[selectedText];
     window.activeagent.agent
     console.log("Agent update triggered")
-    window.agent=window.activeagent;
-   
+    window.agent=window.activeagent;//global observable  pattern
     golbalthis_agent=window.agent;
    }, 
     name: window.activeagent.name,
@@ -173,7 +160,7 @@ const activebotfound = new CustomEvent("botfound", {
     agent:window.agentmanger[selectedText-1]   //return agent variable from the manger list
   },
 });
-// add an appropriate event listener
+// add an appropriate event listener [update agent details]
 var place = document.getElementById("avatar");
 place.addEventListener("botfound", (e) => 
 e.detail.constrctor()
@@ -205,19 +192,14 @@ place.addEventListener('botfound', function(e){
             });
 
 // dispatch the events
-
 place.dispatchEvent(activebotfound);
-
-// "cat" and "dog" logged in the console
  }
  // catch on document...
  document.addEventListener("hello", function(event) { // (1)
-    alert("Hello from " + event.target.tagName); // Hello from H1
+    alert("Hello from " + event.target.tagName); // Hello from targer
   });
   let event = new Event("hello", {bubbles: true}); // (2)
         </script>
-
-
 <script>
     //Make the DIV element draggagle:
 dragElement(document.getElementById("dragable"));
