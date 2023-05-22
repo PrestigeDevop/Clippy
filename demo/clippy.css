@@ -68,7 +68,10 @@
     background-color: #f1f1f1;
     text-align: center;
     border: 1px solid #d3d3d3;
+    display: !;
   }
+
+span#HUD {}
   
   .dragpanel {
     padding: 10px;
@@ -212,5 +215,13 @@ and open the template in the editor.
 
 
  }
-
+ .toggle {
+    width: 100%;
+    padding: 25px;
+    background-color: coral;
+    color: white;
+    font-size: 25px;
+    box-sizing: border-box;
+    display:  !important;;
+  }
  

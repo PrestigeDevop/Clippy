@@ -1,7 +1,7 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <link rel="icon" type="image/x-icon" href="/icon.ico">
     <link rel="stylesheet" type="text/css" href="./clippy.css" media="all">
     <style>
         html {
@@ -20,7 +20,6 @@
    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
    <script src="API.js"></script>
-
     <!-- options with icons-->
     <script type="text/javascript" src="iconselect.js"></script>
     <script type="text/javascript" src="iscroll.js"></script>
@@ -30,19 +29,19 @@
 <body>
   
   <div id="dragable">
-    <div class="dragpanel"id="dragableheader">Control Panel</div>    <button style="size:1cm;" onclick="setelements()">></button>
+    <div class="dragpanel"id="dragableheader">Control Panel</div>    <button style="justify-content: center; display: inline-flex	;" id ="toggle"onclick="setelements()">></button>
 
-<area>
+<span id="HUD">
     <p>Details</p>
     <div id="avatar" style="font-size: xx-small;  overflow-x:scroll;" > text: @</div>
-    <div id="my-icon-select" style="align-self: center; padding: auto;  "></div>
-    <area>
+    <div id="my-icon-select" style="justify-content:center;padding-left:30 ;"></div>
     <button id="button" onclick="myfunction()"> Remove Agent/s</button>
     <div></div>
-    <textarea id="QAS" style=" padding: auto;">give me a Random fact</textarea>
+  </span>
 
+    <textarea id="QAS" style=" padding: auto;">give me a Random fact</textarea>
        <!-- leave this it's needed [some callstacks depend on its ] -->
-    <button onclick="paneloptions()" style="display: none;">event evaluation</button>
+     <button onclick="paneloptions()" style="display: none;">event evaluation</button>
     <button id="ask" onclick="ask()">Ask</button>
   
   </div>
@@ -119,8 +118,18 @@
             window.activeagent=golbalthis_agent;
          });
          function setelements(){
-          var q = document.getElementById("QAS");
+          var x = document.getElementById("toggle");
+  if (x.innerText === ">") {
+    x.innerHTML = "<";
+    //console.log(document.getElementById("HUD"))
+    document.getElementById("HUD").style="display: initial;"
 
+  } else {
+    x.innerHTML = ">";
+    //console.log(document.getElementById("HUD"))
+    document.getElementById("HUD").style="display: none;"
+
+  }
          }
           function ask(){
             //console.log(golbalthis_agent);
@@ -128,6 +137,7 @@
              console.log(`the query string is ${q.value}`)
             golbalthis_agent.speak(q.value);
           }
+          //to do : code refactor
          function myfunction(){ 
            console.log("Asking AIENDPOINT");
            //test  to remove all agents but leave the selected one
@@ -135,11 +145,13 @@
            var leftovers = document.querySelectorAll("clippy-balloon clippy-top-left, clippy-balloon clippy-bottom-right, clippy-balloon clippy-top-right, clippy-balloon clippy-bottom-left, clippy-balloon clippy-bottom-right, clippy-tip, clippy-content")
             for (let item of list) {
            //console.log(item);
-             console.log(window.clippy);
+             //console.log(window.clippy);
               golbalthis_agent.speak("Good bye");
               golbalthis_agent.play("Hide");
-              golbalthis_agent.hide();
-             item.remove();
+              golbalthis_agent.hide();//wait for 2s before removing teh item:
+             setTimeout(()=>{
+              item.remove();
+             },2000)
              //console.log(window.clippy);
           }
             for (let item of leftovers) {
