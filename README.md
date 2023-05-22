@@ -1,5 +1,5 @@
 
-# Clippy and frriends with LLM
+# Clippy and friends with LLM
 
 Clippy and his friends in your web apps , and browser 
 
